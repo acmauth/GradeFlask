@@ -1,0 +1,14 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #263238;
+    width: 80%;
+    margin: 5% auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    color: navy;
+}
