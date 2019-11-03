@@ -43,17 +43,29 @@ def predict(student_id, courses):
     student = models.get_user(app.config["MONGO_DB_URL"].replace("<password>", app.config["MONGO_DB_PASSWORD"]),
                               student_id)
     if student is not None:
-        student_df = pd.DataFrame.from_dict([student], orient="columns")
-        predictions = dict()
-        for course in courses:
-            if course in models.available_courses(app.config["ML_MODELS_FOLDER"]):
-                ml_model = ml_models[course]
-                features = ml_model.get_booster().feature_names
-                selected_features = student_df[features]
-                predictions[course] = str(ml_model.predict(selected_features)[0])
-            else:
-                predictions[course] = "Not Available"
-        return JSONEncoder().encode(predictions)
+        if 'grades' in student:
+            student_df = pd.DataFrame(student['grades'])
+            student_df = student_df[['_id', 'grade']]
+            student_df_transposed = student_df.T
+            headers = student_df_transposed.iloc[0]
+            student_grades = pd.DataFrame(student_df_transposed.values[1:], columns=headers)
+            predictions = dict()
+            for course in courses:
+                if course in models.available_courses(app.config["ML_MODELS_FOLDER"]):
+                    ml_model = ml_models[course]
+                    features = ml_model.get_booster().feature_names
+                    selected_features = dict()
+                    courses_with_grade = student_grades.columns
+                    for feature in features:
+                        if feature in courses_with_grade:
+                            selected_features[feature] = student_grades[feature].values[0]
+                        else:
+                            selected_features[feature] = -1
+                    selected_features = pd.DataFrame(selected_features, index=[1, ])
+                    predictions[course] = str(ml_model.predict(selected_features)[0])
+                else:
+                    predictions[course] = "Not Available"
+            return JSONEncoder().encode(predictions)
     else:
         return {"Error": "Student not found"}
 

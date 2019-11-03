@@ -1,6 +1,6 @@
 import os
 import pickle
-
+from bson.objectid import ObjectId
 import pymongo
 
 
@@ -15,11 +15,11 @@ def read_all_ml_models(models_folder):
 
 def get_user(mongo_db, user_id):
     client = pymongo.MongoClient(mongo_db)
-    db = client.students
-    grades = db.gradeplus
-    students = grades.find({"student_id": user_id})
-    if students.count() > 0:
-        return students[0]
+    db = client.grade_plus_plus
+    users = db.users
+    user = users.find({"_id": ObjectId(user_id)})
+    if user.count() > 0:
+        return user[0]
     else:
         return None
 
