@@ -1,4 +1,4 @@
-DEBUG = True  # Turns on debugging features in Flask
+DEBUG = False  # Turns on debugging features in Flask
 ML_MODELS_FOLDER = "static/models/"
 PORT = 5000
 MONGO_DB_URL = "mongo url"
