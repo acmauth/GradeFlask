@@ -37,6 +37,7 @@ def index():
 def get_courses():
     return jsonify(models.available_courses(app.config["ML_MODELS_FOLDER"]))
 
+
 @app.route("/check_version", methods=['GET'])
 def get_version():
     return jsonify(app.config["VERSION"])
