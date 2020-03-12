@@ -37,6 +37,10 @@ def index():
 def get_courses():
     return jsonify(models.available_courses(app.config["ML_MODELS_FOLDER"]))
 
+@app.route("/check_version", methods=['GET'])
+def get_version():
+    return jsonify(app.config["VERSION"])
+
 
 def predict(student_id, courses):
     # Get the data from the POST request.
@@ -50,6 +54,7 @@ def predict(student_id, courses):
             headers = student_df_transposed.iloc[0]
             student_grades = pd.DataFrame(student_df_transposed.values[1:], columns=headers)
             predictions = dict()
+            predictions["version"] = app.config["VERSION"]
             for course in courses:
                 if course in models.available_courses(app.config["ML_MODELS_FOLDER"]):
                     ml_model = ml_models[course]
