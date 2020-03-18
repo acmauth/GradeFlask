@@ -3,7 +3,7 @@
 ## Info ##
 This is an API for predicting the student's grades. It is meant to be used alongside with
 [GradeServer](https://github.com/acmauth/GradeServer). Given a request with the student's ID and the courses to 
-be predicted it returns the predicted courses for each of the courses. The information of the student are retrieved from
+be predicted it returns the predicted courses for each of the courses along with the version of the model. The information of the student are retrieved from
 a MongoDB. 
 
 A sample json request: 
@@ -18,6 +18,7 @@ A sample json request:
 And the sample response:
 ```json
 {
+    "version": "1",
     "NCO-04-05": "9.996448",
     "NCO-05-06": "Not Available"
 }
