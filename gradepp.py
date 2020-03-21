@@ -68,7 +68,10 @@ def predict(student_id, courses):
                         else:
                             selected_features[feature] = -1
                     selected_features = pd.DataFrame(selected_features, index=[1, ])
-                    predictions[course] = str(ml_model.predict(selected_features)[0])
+                    prediction = round(ml_model.predict(selected_features)[0],2)
+                    if prediction > 10:
+                        prediction = 10.00
+                    predictions[course] = str(prediction)
                 else:
                     predictions[course] = "Not Available"
             return JSONEncoder().encode(predictions)
